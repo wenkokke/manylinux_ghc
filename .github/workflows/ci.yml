@@ -80,7 +80,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/manylinux2014_ghc945_x86_64:latest
 
-  musllinux_ghc945_x86_64:
+  musllinux_1_1_ghc945_x86_64:
     runs-on: ubuntu-latest
     steps:
       - name: Get source
@@ -98,6 +98,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          file: ./Dockerfile.musllinux_ghc945_x86_64
+          file: ./Dockerfile.musllinux_1_1_ghc945_x86_64
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/musllinux_ghc945_x86_64:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/musllinux_1_1_ghc945_x86_64:latest
