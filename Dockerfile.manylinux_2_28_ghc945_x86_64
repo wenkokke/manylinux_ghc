@@ -34,7 +34,7 @@ python3 -c "import shutil; shutil.unpack_archive('/tmp/cabal.zip', '/tmp')"
 mv "/tmp/cabal-cabal-install-v3.10.1.0" "/tmp/cabal"
 (cd "/tmp/cabal" && python3 "./bootstrap/bootstrap.py" -d "./bootstrap/linux-9.2.6.json" -w "/tmp/ghc-toolset-9.2.6/root/usr/bin/ghc-9.2.6")
 PATH="/tmp/ghc-toolset-9.2.6/root/usr/bin:${PATH}" "/tmp/cabal/_build/bin/cabal" v2-update
-PATH="/tmp/ghc-toolset-9.2.6/root/usr/bin:${PATH}" "/tmp/cabal/_build/bin/cabal" v2-install cabal-install cabal-install --overwrite-policy=always --install-method=copy --installdir="/tmp/ghc-toolset-9.2.6/root/usr/bin"
+PATH="/tmp/ghc-toolset-9.2.6/root/usr/bin:${PATH}" "/tmp/cabal/_build/bin/cabal" v2-install cabal-install --overwrite-policy=always --install-method=copy --installdir="/tmp/ghc-toolset-9.2.6/root/usr/bin"
 
 # Bootstrap GHC 9.4.5
 python3 -c "import wget; wget.download('https://downloads.haskell.org/~ghc/9.4.5/ghc-9.4.5-src.tar.xz', '/tmp/ghc-9.4.5-src.tar.xz')"
@@ -77,6 +77,6 @@ rm -rf "/tmp/ghc-toolset-9.2.6" "/tmp/ghc-9.4.5" "/tmp/ghc-9.4.5-src.tar.xz" "/t
 unlink "/usr/local/bin/python3"
 
 # Install Cabal 3.10.1.0
-"/tmp/cabal/_build/bin/cabal" v2-install cabal-install cabal-install --overwrite-policy=always --install-method=copy --installdir="/usr/local/bin"
+"/tmp/cabal/_build/bin/cabal" v2-install cabal-install --overwrite-policy=always --install-method=copy --installdir="/usr/local/bin"
 rm -rf "/tmp/cabal" "/tmp/cabal.zip"
 EOT
