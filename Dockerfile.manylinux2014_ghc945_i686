@@ -15,7 +15,7 @@ python3 -m pip install wget==3.2
 # Install GHC 9.2.6
 python3 -c "import wget; wget.download('https://downloads.haskell.org/~ghc/9.2.6/ghc-9.2.6-i386-deb9-linux.tar.xz', '/tmp/ghc-9.2.6.tar.xz')"
 python3 -c "import shutil; shutil.unpack_archive('/tmp/ghc-9.2.6.tar.xz', '/tmp')"
-(cd "/tmp/ghc-9.2.6" && ./configure  --with-gmp-libraries="/lib" --prefix="/tmp/ghc-toolset-9.2.6/root/usr")
+(cd "/tmp/ghc-9.2.6" && ./configure --with-gmp-libraries="/lib" --prefix="/tmp/ghc-toolset-9.2.6/root/usr")
 (cd "/tmp/ghc-9.2.6" && make install)
 rm -rf "/tmp/ghc-9.2.6" "/tmp/ghc-9.2.6.tar.xz"
 
