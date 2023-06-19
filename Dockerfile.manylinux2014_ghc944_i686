@@ -2,6 +2,9 @@
 # docker build --tag wenkokke/manylinux2014_ghc944_i686 --file Dockerfile.manylinux2014_ghc944_i686 .
 FROM quay.io/pypa/manylinux2014_i686
 
+# Link libgmp.so.10 to libgmp.so
+RUN ln -s "/lib/libgmp.so.10" "/lib/libgmp.so"
+
 # Install GHC and Cabal
 RUN <<EOT bash
 set -ex
@@ -25,7 +28,7 @@ python3 -c "import wget; wget.download('https://github.com/haskell/cabal/archive
 python3 -c "import shutil; shutil.unpack_archive('/tmp/cabal.zip', '/tmp')"
 mv "/tmp/cabal-cabal-install-v3.10.1.0" "/tmp/cabal"
 sed -ie "s/+ofd-locking/-ofd-locking/" "/tmp/cabal/bootstrap/linux-9.4.4.json"
-(cd "/tmp/cabal" && LD_LIBRARY_PATH="/lib:${LD_LIBRARY_PATH}" python3 "./bootstrap/bootstrap.py" -d "./bootstrap/linux-9.4.4.json" -w "/usr/local/bin/ghc-9.4.4")
+(cd "/tmp/cabal" && python3 "./bootstrap/bootstrap.py" -d "./bootstrap/linux-9.4.4.json" -w "/usr/local/bin/ghc-9.4.4")
 "/tmp/cabal/_build/bin/cabal" v2-update
 "/tmp/cabal/_build/bin/cabal" v2-install cabal-install --constraint="lukko -ofd-locking" --overwrite-policy=always --install-method=copy --installdir="/usr/local/bin"
 rm -rf "/tmp/cabal" "/tmp/cabal.zip"
