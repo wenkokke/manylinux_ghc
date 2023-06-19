@@ -32,9 +32,7 @@ defaults:
 
 jobs:
   manylinux_2_28_ghc945_aarch64:
-    name: Build manylinux_2_28_ghc945_aarch64
     runs-on: ubuntu-latest
-
     steps:
       - name: Get source
         uses: actions/checkout@v3
@@ -61,9 +59,7 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/manylinux_2_28_ghc945_aarch64:latest
 
   manylinux2014_ghc945_x86_64:
-    name: Build manylinux2014_ghc945_x86_64
     runs-on: ubuntu-latest
-
     steps:
       - name: Get source
         uses: actions/checkout@v3
@@ -85,9 +81,7 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/manylinux2014_ghc945_x86_64:latest
 
   musllinux_ghc945_x86_64:
-    name: Build musllinux_ghc945_x86_64
     runs-on: ubuntu-latest
-
     steps:
       - name: Get source
         uses: actions/checkout@v3
