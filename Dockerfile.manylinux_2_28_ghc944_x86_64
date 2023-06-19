@@ -39,9 +39,39 @@ PATH="/tmp/ghc-toolset-9.2.6/root/usr/bin:${PATH}" "/tmp/cabal/_build/bin/cabal"
 # Bootstrap GHC 9.4.4
 python3 -c "import wget; wget.download('https://downloads.haskell.org/~ghc/9.4.4/ghc-9.4.4-src.tar.xz', '/tmp/ghc-9.4.4-src.tar.xz')"
 python3 -c "import shutil; shutil.unpack_archive('/tmp/ghc-9.4.4-src.tar.xz', '/tmp')"
+
+## Create and apply the fpic-default patch
+mkdir "/tmp/ghc-9.4.4-patches"
+cat > "/tmp/ghc-9.4.4-patches/fpic-default.patch" <<EOP
+Index: ghc-9.4.4/compiler/GHC/Driver/Session.hs
+===================================================================
+--- ghc-9.4.4.orig/compiler/GHC/Driver/Session.hs
++++ ghc-9.4.4/compiler/GHC/Driver/Session.hs
+@@ -3871,6 +3871,7 @@ default_PIC platform =
+     -- of that.  Subsequently we expect all code on aarch64/linux (and macOS) to
+     -- be built with -fPIC.
+     (OSDarwin,  ArchAArch64) -> [Opt_PIC]
++    (OSLinux,   ArchX86_64)  -> [Opt_PIC]
+     (OSLinux,   ArchAArch64) -> [Opt_PIC, Opt_ExternalDynamicRefs]
+     (OSLinux,   ArchARM {})  -> [Opt_PIC, Opt_ExternalDynamicRefs]
+     (OSOpenBSD, ArchX86_64)  -> [Opt_PIC] -- Due to PIE support in
+EOP
+(cd "/tmp" && patch -p0 < "/tmp/ghc-9.4.4-patches/fpic-default.patch")
+rm -rf "/tmp/ghc-9.4.4-patches"
+
+## Create and update mk/build.mk
+cp "/tmp/ghc-9.4.4/mk/build.mk.sample" "/tmp/ghc-9.4.4/mk/build.mk"
+cat >> "/tmp/ghc-9.4.4/mk/build.mk" <<EOP
+
+GhcLibHcOpts += -fPIC
+GhcRtsHcOpts += -fPIC
+GhcRtsCcOpts += -fPIC
+BuildFlavour = quick
+EOP
+
 (cd "/tmp/ghc-9.4.4" && PATH="/tmp/ghc-toolset-9.2.6/root/usr/bin:${PATH}" ./configure GHC="/tmp/ghc-toolset-9.2.6/root/usr/bin/ghc-9.2.6")
 (cd "/tmp/ghc-9.4.4" && PATH="/tmp/ghc-toolset-9.2.6/root/usr/bin:${PATH}" hadrian/build install --docs=none -j --prefix="/usr/local")
-rm -rf "/tmp/ghc-toolset-9.2.6/root/usr" "/tmp/ghc-9.4.4" "/tmp/ghc-9.4.4-src.tar.xz"
+rm -rf "/tmp/ghc-toolset-9.2.6" "/tmp/ghc-9.4.4" "/tmp/ghc-9.4.4-src.tar.xz" "/tmp/ghc-9.4.4-patches"
 
 # Unlink python3.11 from python3
 unlink "/usr/local/bin/python3"

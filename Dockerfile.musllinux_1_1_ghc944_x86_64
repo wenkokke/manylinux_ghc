@@ -64,7 +64,7 @@ EOP
 ## Install GHC 9.4.4
 (cd "/tmp/ghc-9.4.4" && PATH="/tmp/ghc-toolset-9.2.6/root/usr/bin:${PATH}" ./configure GHC="/tmp/ghc-toolset-9.2.6/root/usr/bin/ghc-9.2.6")
 (cd "/tmp/ghc-9.4.4" && PATH="/tmp/ghc-toolset-9.2.6/root/usr/bin:${PATH}" hadrian/build install --docs=none -j --prefix="/usr/local")
-rm -rf "/tmp/ghc-toolset-9.2.6/root/usr" "/tmp/ghc-9.4.4" "/tmp/ghc-9.4.4-src.tar.xz"
+rm -rf "/tmp/ghc-toolset-9.2.6" "/tmp/ghc-9.4.4" "/tmp/ghc-9.4.4-src.tar.xz"
 
 # Install Cabal 3.10.1.0
 "/tmp/cabal/_build/bin/cabal" v2-install cabal-install cabal-install --overwrite-policy=always --install-method=copy --installdir="/usr/local/bin"
