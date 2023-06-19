@@ -27,6 +27,8 @@ rm -rf "/tmp/ghc" "/tmp/ghc-9.4.5.tar.xz"
 python3 -c "import wget; wget.download('https://github.com/haskell/cabal/archive/refs/tags/cabal-install-v3.10.1.0.zip', '/tmp/cabal.zip')"
 python3 -c "import shutil; shutil.unpack_archive('/tmp/cabal.zip', '/tmp')"
 mv "/tmp/cabal-cabal-install-v3.10.1.0" "/tmp/cabal"
+cp "/tmp/cabal/bootstrap/linux-9.4.4.json" "/tmp/cabal/bootstrap/linux-9.4.5.json"
+sed -ie 's/4.17.0.0/4.17.1.0/' "/tmp/cabal/bootstrap/linux-9.4.5.json"
 sed -ie 's/+ofd-locking/-ofd-locking/' "/tmp/cabal/bootstrap/linux-9.4.5.json"
 (cd "/tmp/cabal" && python3 "./bootstrap/bootstrap.py" -d "./bootstrap/linux-9.4.5.json" -w "/usr/local/bin/ghc-9.4.5")
 "/tmp/cabal/_build/bin/cabal" v2-update
