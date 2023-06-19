@@ -1,0 +1,47 @@
+name: manylinux2014_ghc944_i686
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "Dockerfile.manylinux2014_ghc944_i686"
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+    paths:
+      - "Dockerfile.manylinux2014_ghc944_i686"
+
+defaults:
+  run:
+    shell: sh
+
+jobs:
+  manylinux2014_ghc944_i686:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get source
+        uses: actions/checkout@v3
+
+      - name: Set up QEMU (linux/i686)
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: "386"
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          file: ./Dockerfile.manylinux2014_ghc944_i686
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/manylinux2014_ghc944_i686:latest
