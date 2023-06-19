@@ -4,6 +4,7 @@ FROM quay.io/pypa/musllinux_1_1_x86_64
 
 # Install prerequisites
 RUN apk add gmp-dev
+RUN apk add ncurses ncurses-dev
 
 # Install GHC and Cabal
 RUN <<EOT bash
