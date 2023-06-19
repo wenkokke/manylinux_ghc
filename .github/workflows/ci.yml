@@ -44,7 +44,8 @@ jobs:
           platforms: aarch64
 
       - name: Build manylinux_2_28_ghc945_aarch64
-        run: docker build --tag wenkokke/manylinux_2_28_ghc945_aarch64 --file dockerfiles/Dockerfile.manylinux_2_28_ghc945_aarch64 .
+        run: docker build --tag wenkokke/manylinux_2_28_ghc945_aarch64 --file Dockerfile.manylinux_2_28_ghc945_aarch64 .
+        working-directory: dockerfiles
 
   manylinux2014_ghc945_x86_64:
     name: Build manylinux2014_ghc945_x86_64
@@ -54,7 +55,8 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Build manylinux2014_ghc945_x86_64
-        run: docker build --tag wenkokke/manylinux2014_ghc945_x86_64 --file dockerfiles/Dockerfile.manylinux2014_ghc945_x86_64 .
+        run: docker build --tag wenkokke/manylinux2014_ghc945_x86_64 --file Dockerfile.manylinux2014_ghc945_x86_64 .
+        working-directory: dockerfiles
 
   musllinux_ghc945_x86_64:
     name: Build musllinux_ghc945_x86_64
@@ -64,4 +66,5 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Build musllinux_ghc945_x86_64
-        run: docker build --tag wenkokke/musllinux_ghc945_x86_64 --file dockerfiles/Dockerfile.musllinux_ghc945_x86_64 .
+        run: docker build --tag wenkokke/musllinux_ghc945_x86_64 --file Dockerfile.musllinux_ghc945_x86_64 .
+        working-directory: dockerfiles
