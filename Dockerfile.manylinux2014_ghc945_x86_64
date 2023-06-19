@@ -61,7 +61,7 @@ GhcRtsCcOpts += -fPIC
 BuildFlavour = quick
 EOP
 
-(cd "/tmp/ghc-9.4.5" && PATH="/tmp/ghc-toolset-9.2.6/root/usr/bin:${PATH}" ./configure GHC="/tmp/ghc-toolset-9.2.6/root/usr/bin/ghc-9.2.6")
+(cd "/tmp/ghc-9.4.5" && PATH="/tmp/ghc-toolset-9.2.6/root/usr/bin:${PATH}" ./configure --with-gmp-libraries="/lib64" GHC="/tmp/ghc-toolset-9.2.6/root/usr/bin/ghc-9.2.6")
 (cd "/tmp/ghc-9.4.5" && PATH="/tmp/ghc-toolset-9.2.6/root/usr/bin:${PATH}" hadrian/build install --docs=none -j --prefix="/usr/local")
 rm -rf "/tmp/ghc-toolset-9.2.6" "/tmp/ghc-9.4.5" "/tmp/ghc-9.4.5-src.tar.xz"
 
