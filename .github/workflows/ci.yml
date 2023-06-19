@@ -31,7 +31,7 @@ defaults:
     shell: sh
 
 jobs:
-  manylinux_2_28_ghc944_aarch64:
+  manylinux_2_28_ghc945_aarch64:
     runs-on: ubuntu-latest
     steps:
       - name: Get source
@@ -54,11 +54,11 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          file: ./Dockerfile.manylinux_2_28_ghc944_aarch64
+          file: ./Dockerfile.manylinux_2_28_ghc945_aarch64
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/manylinux_2_28_ghc944_aarch64:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/manylinux_2_28_ghc945_aarch64:latest
 
-  manylinux_2_28_ghc944_x86_64:
+  manylinux_2_28_ghc945_x86_64:
     runs-on: ubuntu-latest
     steps:
       - name: Get source
@@ -76,11 +76,11 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          file: ./Dockerfile.manylinux_2_28_ghc944_x86_64
+          file: ./Dockerfile.manylinux_2_28_ghc945_x86_64
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/manylinux_2_28_ghc944_x86_64:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/manylinux_2_28_ghc945_x86_64:latest
 
-  manylinux2014_ghc944_i686:
+  manylinux2014_ghc945_i686:
     runs-on: ubuntu-latest
     steps:
       - name: Get source
@@ -103,11 +103,11 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          file: ./Dockerfile.manylinux2014_ghc944_i686
+          file: ./Dockerfile.manylinux2014_ghc945_i686
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/manylinux2014_ghc944_i686:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/manylinux2014_ghc945_i686:latest
 
-  manylinux2014_ghc944_x86_64:
+  manylinux2014_ghc945_x86_64:
     runs-on: ubuntu-latest
     steps:
       - name: Get source
@@ -125,11 +125,11 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          file: ./Dockerfile.manylinux2014_ghc944_x86_64
+          file: ./Dockerfile.manylinux2014_ghc945_x86_64
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/manylinux2014_ghc944_x86_64:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/manylinux2014_ghc945_x86_64:latest
 
-  musllinux_1_1_ghc944_x86_64:
+  musllinux_1_1_ghc945_x86_64:
     runs-on: ubuntu-latest
     steps:
       - name: Get source
@@ -147,6 +147,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          file: ./Dockerfile.musllinux_1_1_ghc944_x86_64
+          file: ./Dockerfile.musllinux_1_1_ghc945_x86_64
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/musllinux_1_1_ghc944_x86_64:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/musllinux_1_1_ghc945_x86_64:latest
