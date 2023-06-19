@@ -36,35 +36,74 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Get source
+        uses: actions/checkout@v3
 
       - name: Set up QEMU (linux/aarch64)
         uses: docker/setup-qemu-action@v2
         with:
           platforms: aarch64
 
-      - name: Build manylinux_2_28_ghc945_aarch64
-        run: docker build --tag wenkokke/manylinux_2_28_ghc945_aarch64 --file Dockerfile.manylinux_2_28_ghc945_aarch64 .
-        working-directory: dockerfiles
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          file: ./Dockerfile.manylinux_2_28_ghc945_aarch64
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/manylinux_2_28_ghc945_aarch64:latest
 
   manylinux2014_ghc945_x86_64:
     name: Build manylinux2014_ghc945_x86_64
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Get source
+        uses: actions/checkout@v3
 
-      - name: Build manylinux2014_ghc945_x86_64
-        run: docker build --tag wenkokke/manylinux2014_ghc945_x86_64 --file Dockerfile.manylinux2014_ghc945_x86_64 .
-        working-directory: dockerfiles
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          file: ./Dockerfile.manylinux2014_ghc945_x86_64
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/manylinux2014_ghc945_x86_64:latest
 
   musllinux_ghc945_x86_64:
     name: Build musllinux_ghc945_x86_64
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Get source
+        uses: actions/checkout@v3
 
-      - name: Build musllinux_ghc945_x86_64
-        run: docker build --tag wenkokke/musllinux_ghc945_x86_64 --file Dockerfile.musllinux_ghc945_x86_64 .
-        working-directory: dockerfiles
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          file: ./Dockerfile.musllinux_ghc945_x86_64
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/musllinux_ghc945_x86_64:latest
