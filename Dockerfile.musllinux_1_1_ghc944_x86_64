@@ -1,5 +1,5 @@
 # Build the container
-# docker build --tag wenkokke/musllinux_1_1_ghc945_x86_64 --file dockerfiles/Dockerfile.musllinux_1_1_ghc945_x86_64 .
+# docker build --tag wenkokke/musllinux_1_1_ghc944_x86_64 --file Dockerfile.musllinux_1_1_ghc944_x86_64 .
 FROM quay.io/pypa/musllinux_1_1_x86_64
 
 # Install prerequisites
@@ -28,17 +28,17 @@ mv "/tmp/cabal-cabal-install-v3.10.1.0" "/tmp/cabal"
 PATH="/tmp/ghc-toolset-9.2.6/root/usr/bin:${PATH}" "/tmp/cabal/_build/bin/cabal" v2-update
 PATH="/tmp/ghc-toolset-9.2.6/root/usr/bin:${PATH}" "/tmp/cabal/_build/bin/cabal" v2-install cabal-install cabal-install --overwrite-policy=always --install-method=copy --installdir="/tmp/ghc-toolset-9.2.6/root/usr/bin"
 
-# Bootstrap GHC 9.4.5
-python3.11 -c "import wget; wget.download('https://downloads.haskell.org/~ghc/9.4.5/ghc-9.4.5-src.tar.xz', '/tmp/ghc-9.4.5-src.tar.xz')"
-python3.11 -c "import shutil; shutil.unpack_archive('/tmp/ghc-9.4.5-src.tar.xz', '/tmp')"
+# Bootstrap GHC 9.4.4
+python3.11 -c "import wget; wget.download('https://downloads.haskell.org/~ghc/9.4.4/ghc-9.4.4-src.tar.xz', '/tmp/ghc-9.4.4-src.tar.xz')"
+python3.11 -c "import shutil; shutil.unpack_archive('/tmp/ghc-9.4.4-src.tar.xz', '/tmp')"
 
 ## Create and apply the fpic-default patch
-mkdir "/tmp/ghc-9.4.5-patches"
-cat > "/tmp/ghc-9.4.5-patches/fpic-default.patch" <<EOP
-Index: ghc-9.4.5/compiler/GHC/Driver/Session.hs
+mkdir "/tmp/ghc-9.4.4-patches"
+cat > "/tmp/ghc-9.4.4-patches/fpic-default.patch" <<EOP
+Index: ghc-9.4.4/compiler/GHC/Driver/Session.hs
 ===================================================================
---- ghc-9.4.5.orig/compiler/GHC/Driver/Session.hs
-+++ ghc-9.4.5/compiler/GHC/Driver/Session.hs
+--- ghc-9.4.4.orig/compiler/GHC/Driver/Session.hs
++++ ghc-9.4.4/compiler/GHC/Driver/Session.hs
 @@ -3871,6 +3871,7 @@ default_PIC platform =
      -- of that.  Subsequently we expect all code on aarch64/linux (and macOS) to
      -- be built with -fPIC.
@@ -48,12 +48,12 @@ Index: ghc-9.4.5/compiler/GHC/Driver/Session.hs
      (OSLinux,   ArchARM {})  -> [Opt_PIC, Opt_ExternalDynamicRefs]
      (OSOpenBSD, ArchX86_64)  -> [Opt_PIC] -- Due to PIE support in
 EOP
-(cd "/tmp" && patch -p0 < "/tmp/ghc-9.4.5-patches/fpic-default.patch")
-rm -rf "/tmp/ghc-9.4.5-patches"
+(cd "/tmp" && patch -p0 < "/tmp/ghc-9.4.4-patches/fpic-default.patch")
+rm -rf "/tmp/ghc-9.4.4-patches"
 
 ## Create and update mk/build.mk
-cp "/tmp/ghc-9.4.5/mk/build.mk.sample" "/tmp/ghc-9.4.5/mk/build.mk"
-cat >> "/tmp/ghc-9.4.5/mk/build.mk" <<EOP
+cp "/tmp/ghc-9.4.4/mk/build.mk.sample" "/tmp/ghc-9.4.4/mk/build.mk"
+cat >> "/tmp/ghc-9.4.4/mk/build.mk" <<EOP
 
 GhcLibHcOpts += -fPIC
 GhcRtsHcOpts += -fPIC
@@ -61,10 +61,10 @@ GhcRtsCcOpts += -fPIC
 BuildFlavour = quick
 EOP
 
-## Install GHC 9.4.5
-(cd "/tmp/ghc-9.4.5" && PATH="/tmp/ghc-toolset-9.2.6/root/usr/bin:${PATH}" ./configure GHC="/tmp/ghc-toolset-9.2.6/root/usr/bin/ghc-9.2.6")
-(cd "/tmp/ghc-9.4.5" && PATH="/tmp/ghc-toolset-9.2.6/root/usr/bin:${PATH}" hadrian/build install --docs=none -j --prefix="/usr/local")
-rm -rf "/tmp/ghc-toolset-9.2.6/root/usr" "/tmp/ghc-9.4.5" "/tmp/ghc-9.4.5-src.tar.xz"
+## Install GHC 9.4.4
+(cd "/tmp/ghc-9.4.4" && PATH="/tmp/ghc-toolset-9.2.6/root/usr/bin:${PATH}" ./configure GHC="/tmp/ghc-toolset-9.2.6/root/usr/bin/ghc-9.2.6")
+(cd "/tmp/ghc-9.4.4" && PATH="/tmp/ghc-toolset-9.2.6/root/usr/bin:${PATH}" hadrian/build install --docs=none -j --prefix="/usr/local")
+rm -rf "/tmp/ghc-toolset-9.2.6/root/usr" "/tmp/ghc-9.4.4" "/tmp/ghc-9.4.4-src.tar.xz"
 
 # Install Cabal 3.10.1.0
 "/tmp/cabal/_build/bin/cabal" v2-install cabal-install cabal-install --overwrite-policy=always --install-method=copy --installdir="/usr/local/bin"
