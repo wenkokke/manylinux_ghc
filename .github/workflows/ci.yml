@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*"
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+  merge_group:
+
+  schedule:
+    #        ┌───────────── minute (0 - 59)
+    #        │ ┌───────────── hour (0 - 23)
+    #        │ │ ┌───────────── day of the month (1 - 31)
+    #        │ │ │ ┌───────────── month (1 - 12 or JAN-DEC)
+    #        │ │ │ │ ┌───────────── day of the week (0 - 6 or SUN-SAT)
+    #        │ │ │ │ │
+    #        │ │ │ │ │
+    #        │ │ │ │ │
+    - cron: "0 0 * * 0"
+
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: sh
+
+jobs:
+  manylinux_2_28_ghc945_aarch64:
+    name: Build manylinux_2_28_ghc945_aarch64
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up QEMU (linux/aarch64)
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: aarch64
+
+      - name: Build manylinux_2_28_ghc945_aarch64
+        run: docker build --tag wenkokke/manylinux_2_28_ghc945_aarch64 --file dockerfiles/Dockerfile.manylinux_2_28_ghc945_aarch64 .
+
+  manylinux2014_ghc945_x86_64:
+    name: Build manylinux2014_ghc945_x86_64
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build manylinux2014_ghc945_x86_64
+        run: docker build --tag wenkokke/manylinux2014_ghc945_x86_64 --file dockerfiles/Dockerfile.manylinux2014_ghc945_x86_64 .
+
+  musllinux_ghc945_x86_64:
+    name: Build musllinux_ghc945_x86_64
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build musllinux_ghc945_x86_64
+        run: docker build --tag wenkokke/musllinux_ghc945_x86_64 --file dockerfiles/Dockerfile.musllinux_ghc945_x86_64 .
