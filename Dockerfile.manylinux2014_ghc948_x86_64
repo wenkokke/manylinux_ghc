@@ -1,0 +1,38 @@
+# Build the container
+# docker build --tag wenkokke/manylinux2014_ghc948_x86_64 --file Dockerfile.manylinux2014_ghc948_x86_64 .
+FROM quay.io/pypa/manylinux2014_x86_64
+
+# Link libgmp.so.10 to libgmp.so
+RUN ln -s "/lib64/libgmp.so.10" "/lib64/libgmp.so"
+
+# Install GHC and Cabal
+RUN <<EOT bash
+set -ex
+
+# Link python3.12 to python3
+ln -s "/usr/local/bin/python3.12" "/usr/local/bin/python3"
+
+# Install wget 3.2
+python3 -m pip install wget==3.2
+
+# Install GHC 9.4.8
+python3 -c "import wget; wget.download('https://downloads.haskell.org/~ghc/9.4.8/ghc-9.4.8-x86_64-centos7-linux.tar.xz', '/tmp/ghc-9.4.8.tar.xz')"
+python3 -c "import shutil; shutil.unpack_archive('/tmp/ghc-9.4.8.tar.xz', '/tmp')"
+mv "/tmp/ghc-9.4.8-x86_64-unknown-linux" "/tmp/ghc-9.4.8"
+(cd "/tmp/ghc-9.4.8" && ./configure --with-gmp-libraries="/lib64" --prefix="/usr/local")
+(cd "/tmp/ghc-9.4.8" && make install)
+rm -rf "/tmp/ghc-9.4.8" "/tmp/ghc-9.4.8.tar.xz"
+
+# Bootstrap Cabal 3.10.2.1
+python3 -c "import wget; wget.download('https://github.com/haskell/cabal/archive/refs/tags/cabal-install-v3.10.2.1.zip', '/tmp/cabal.zip')"
+python3 -c "import shutil; shutil.unpack_archive('/tmp/cabal.zip', '/tmp')"
+mv "/tmp/cabal-cabal-install-v3.10.2.1" "/tmp/cabal"
+sed -ie "s/+ofd-locking/-ofd-locking/" "/tmp/cabal/bootstrap/linux-9.4.8.json"
+(cd "/tmp/cabal" && python3 "./bootstrap/bootstrap.py" -d "./bootstrap/linux-9.4.8.json" -w "/usr/local/bin/ghc-9.4.8")
+"/tmp/cabal/_build/bin/cabal" v2-update
+"/tmp/cabal/_build/bin/cabal" v2-install cabal-install --constraint="lukko -ofd-locking" --overwrite-policy=always --install-method=copy --installdir="/usr/local/bin"
+rm -rf "/tmp/cabal" "/tmp/cabal.zip"
+
+# Unlink python3.12 from python3
+unlink "/usr/local/bin/python3"
+EOT
