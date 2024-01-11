@@ -78,6 +78,6 @@ rm -rf "/tmp/ghc-toolset-9.2.8" "/tmp/ghc-9.4.8" "/tmp/ghc-9.4.8-src.tar.xz" "/t
 unlink "/usr/local/bin/python3"
 
 # Install Cabal 3.10.2.1
-"/tmp/cabal/_build/bin/cabal" v2-install cabal-install --overwrite-policy=always --install-method=copy --installdir="/usr/local/bin"
+"/tmp/cabal/_build/bin/cabal" v2-install cabal-install --constraint="lukko -ofd-locking" --overwrite-policy=always --install-method=copy --installdir="/usr/local/bin"
 rm -rf "/tmp/cabal" "/tmp/cabal.zip"
 EOT
