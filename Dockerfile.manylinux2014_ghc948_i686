@@ -6,7 +6,7 @@ FROM quay.io/pypa/manylinux2014_i686
 RUN ln -s "/lib/libgmp.so.10" "/lib/libgmp.so"
 
 # Link libtinfo.so.6 to libtinfo.so
-RUN ln -s "/usr/lib64/libtinfo.so.6" "/usr/lib64/libtinfo.so"
+RUN ln -s "/usr/lib/libtinfo.so.6" "/usr/lib/libtinfo.so"
 
 # Install GHC and Cabal
 RUN <<EOT bash
