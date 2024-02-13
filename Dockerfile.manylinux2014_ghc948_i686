@@ -2,11 +2,8 @@
 # docker build --tag wenkokke/manylinux2014_ghc948_i686 --file Dockerfile.manylinux2014_ghc948_i686 .
 FROM quay.io/pypa/manylinux2014_i686
 
-# Link libgmp.so.10 to libgmp.so
-RUN ln -s "/lib/libgmp.so.10" "/lib/libgmp.so"
-
-# Link libtinfo.so.6 to libtinfo.so
-RUN ln -s "/usr/lib/libtinfo.so.6" "/usr/lib/libtinfo.so"
+# Install prerequisites
+RUN yum install -y gmp-devel ncurses-devel
 
 # Install GHC and Cabal
 RUN <<EOT bash
