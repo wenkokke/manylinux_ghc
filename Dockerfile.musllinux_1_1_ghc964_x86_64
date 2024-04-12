@@ -14,7 +14,7 @@ set -ex
 python3.11 -m pip install wget==3.2
 
 # Install GHC 9.4.8
-python3.11 -c "import wget; wget.download('https://downloads.haskell.org/~ghc/9.4.8/ghc-9.4.8-x86_64-alpine3.12-linux-gmp.tar.xz', '/tmp/ghc-9.4.8.tar.xz')"
+python3.11 -c "import wget; wget.download('https://downloads.haskell.org/~ghc/9.4.8/ghc-9.4.8-x86_64-alpine3_12-linux.tar.xz', '/tmp/ghc-9.4.8.tar.xz')"
 python3.11 -c "import shutil; shutil.unpack_archive('/tmp/ghc-9.4.8.tar.xz', '/tmp')"
 mv "/tmp/ghc-9.4.8-x86_64-unknown-linux" "/tmp/ghc-9.4.8"
 (cd "/tmp/ghc-9.4.8" && ./configure --prefix="/tmp/ghc-toolset-9.4.8/root/usr")
