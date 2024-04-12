@@ -24,6 +24,7 @@ python3 -m pip install wget==3.2
 # Install GHC 9.4.8
 python3 -c "import wget; wget.download('https://downloads.haskell.org/~ghc/9.4.8/ghc-9.4.8-x86_64-deb10-linux.tar.xz', '/tmp/ghc-9.4.8.tar.xz')"
 python3 -c "import shutil; shutil.unpack_archive('/tmp/ghc-9.4.8.tar.xz', '/tmp')"
+(mv "/tmp/ghc-9.4.8-x86_64-deb10-linux" "/tmp/ghc-9.4.8")
 (cd "/tmp/ghc-9.4.8" && ./configure --prefix="/tmp/ghc-toolset-9.4.8/root/usr")
 (cd "/tmp/ghc-9.4.8" && make install)
 rm -rf "/tmp/ghc-9.4.8" "/tmp/ghc-9.4.8.tar.xz"
