@@ -59,16 +59,6 @@ EOP
 (cd "/tmp" && patch -p0 < "/tmp/ghc-9.6.4-patches/fpic-default.patch")
 rm -rf "/tmp/ghc-9.6.4-patches"
 
-## Create and update mk/build.mk
-cp "/tmp/ghc-9.6.4/mk/build.mk.sample" "/tmp/ghc-9.6.4/mk/build.mk"
-cat >> "/tmp/ghc-9.6.4/mk/build.mk" <<EOP
-
-GhcLibHcOpts += -fPIC
-GhcRtsHcOpts += -fPIC
-GhcRtsCcOpts += -fPIC
-BuildFlavour = quick
-EOP
-
 (cd "/tmp/ghc-9.6.4" && PATH="/tmp/ghc-toolset-9.4.8/root/usr/bin:${PATH}" ./configure GHC="/tmp/ghc-toolset-9.4.8/root/usr/bin/ghc-9.4.8")
 (cd "/tmp/ghc-9.6.4" && PATH="/tmp/ghc-toolset-9.4.8/root/usr/bin:${PATH}" hadrian/build install --docs=none -j --prefix="/usr/local")
 rm -rf "/tmp/ghc-toolset-9.4.8" "/tmp/ghc-9.6.4" "/tmp/ghc-9.6.4-src.tar.xz" "/tmp/ghc-9.6.4-patches"
