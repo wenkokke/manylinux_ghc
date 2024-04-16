@@ -1,18 +1,18 @@
-name: manylinux2014_ghc964_i686
+name: manylinux2014_ghc965_i686
 
 on:
   push:
     branches:
       - main
     paths:
-      - "Dockerfile.manylinux2014_ghc964_i686"
+      - "Dockerfile.manylinux2014_ghc965_i686"
   pull_request:
     types:
       - opened
       - synchronize
       - reopened
     paths:
-      - "Dockerfile.manylinux2014_ghc964_i686"
+      - "Dockerfile.manylinux2014_ghc965_i686"
   workflow_dispatch:
 
 defaults:
@@ -20,7 +20,7 @@ defaults:
     shell: sh
 
 jobs:
-  manylinux2014_ghc964_i686:
+  manylinux2014_ghc965_i686:
     runs-on: ubuntu-latest
     steps:
       - name: Get source
@@ -43,6 +43,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          file: ./Dockerfile.manylinux2014_ghc964_i686
+          file: ./Dockerfile.manylinux2014_ghc965_i686
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/manylinux2014_ghc964_i686:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/manylinux2014_ghc965_i686:latest

@@ -1,5 +1,5 @@
 # Build the container
-# docker build --tag wenkokke/manylinux2014_ghc964_i686 --file Dockerfile.manylinux2014_ghc964_i686 .
+# docker build --tag wenkokke/manylinux2014_ghc965_i686 --file Dockerfile.manylinux2014_ghc965_i686 .
 FROM quay.io/pypa/manylinux2014_i686
 
 # Install prerequisites
@@ -32,17 +32,17 @@ sed -ie "s/+ofd-locking/-ofd-locking/" "/tmp/cabal/bootstrap/linux-9.4.8.json"
 PATH="/tmp/ghc-toolset-9.4.8/root/usr/bin:${PATH}" "/tmp/cabal/_build/bin/cabal" v2-update
 PATH="/tmp/ghc-toolset-9.4.8/root/usr/bin:${PATH}" "/tmp/cabal/_build/bin/cabal" v2-install cabal-install --constraint="lukko -ofd-locking" --overwrite-policy=always --install-method=copy --installdir="/tmp/ghc-toolset-9.4.8/root/usr/bin"
 
-# Bootstrap GHC 9.6.4
-python3 -c "import wget; wget.download('https://downloads.haskell.org/~ghc/9.6.4/ghc-9.6.4-src.tar.xz', '/tmp/ghc-9.6.4-src.tar.xz')"
-python3 -c "import shutil; shutil.unpack_archive('/tmp/ghc-9.6.4-src.tar.xz', '/tmp')"
+# Bootstrap GHC 9.6.5
+python3 -c "import wget; wget.download('https://downloads.haskell.org/~ghc/9.6.5/ghc-9.6.5-src.tar.xz', '/tmp/ghc-9.6.5-src.tar.xz')"
+python3 -c "import shutil; shutil.unpack_archive('/tmp/ghc-9.6.5-src.tar.xz', '/tmp')"
 
 ## Create and apply the fpic-default patch
-mkdir "/tmp/ghc-9.6.4-patches"
-cat > "/tmp/ghc-9.6.4-patches/fpic-default.patch" <<EOP
-Index: ghc-9.6.4/compiler/GHC/Driver/Session.hs
+mkdir "/tmp/ghc-9.6.5-patches"
+cat > "/tmp/ghc-9.6.5-patches/fpic-default.patch" <<EOP
+Index: ghc-9.6.5/compiler/GHC/Driver/Session.hs
 ===================================================================
---- ghc-9.6.4.orig/compiler/GHC/Driver/Session.hs
-+++ ghc-9.6.4/compiler/GHC/Driver/Session.hs
+--- ghc-9.6.5.orig/compiler/GHC/Driver/Session.hs
++++ ghc-9.6.5/compiler/GHC/Driver/Session.hs
 @@ -3871,6 +3871,7 @@ default_PIC platform =
      -- of that.  Subsequently we expect all code on aarch64/linux (and macOS) to
      -- be built with -fPIC.
@@ -52,12 +52,12 @@ Index: ghc-9.6.4/compiler/GHC/Driver/Session.hs
      (OSLinux,   ArchARM {})  -> [Opt_PIC, Opt_ExternalDynamicRefs]
      (OSOpenBSD, ArchX86_64)  -> [Opt_PIC] -- Due to PIE support in
 EOP
-(cd "/tmp" && patch -p0 < "/tmp/ghc-9.6.4-patches/fpic-default.patch")
-rm -rf "/tmp/ghc-9.6.4-patches"
+(cd "/tmp" && patch -p0 < "/tmp/ghc-9.6.5-patches/fpic-default.patch")
+rm -rf "/tmp/ghc-9.6.5-patches"
 
-(cd "/tmp/ghc-9.6.4" && PATH="/tmp/ghc-toolset-9.4.8/root/usr/bin:${PATH}" ./configure GHC="/tmp/ghc-toolset-9.4.8/root/usr/bin/ghc-9.4.8")
-(cd "/tmp/ghc-9.6.4" && PATH="/tmp/ghc-toolset-9.4.8/root/usr/bin:${PATH}" hadrian/build install --docs=none -j --prefix="/usr/local")
-rm -rf "/tmp/ghc-toolset-9.4.8" "/tmp/ghc-9.6.4" "/tmp/ghc-9.6.4-src.tar.xz" "/tmp/ghc-9.6.4-patches"
+(cd "/tmp/ghc-9.6.5" && PATH="/tmp/ghc-toolset-9.4.8/root/usr/bin:${PATH}" ./configure GHC="/tmp/ghc-toolset-9.4.8/root/usr/bin/ghc-9.4.8")
+(cd "/tmp/ghc-9.6.5" && PATH="/tmp/ghc-toolset-9.4.8/root/usr/bin:${PATH}" hadrian/build install --docs=none -j --prefix="/usr/local")
+rm -rf "/tmp/ghc-toolset-9.4.8" "/tmp/ghc-9.6.5" "/tmp/ghc-9.6.5-src.tar.xz" "/tmp/ghc-9.6.5-patches"
 
 # Unlink python3.12 from python3
 unlink "/usr/local/bin/python3"

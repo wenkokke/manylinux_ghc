@@ -1,18 +1,18 @@
-name: manylinux_2_28_ghc964_x86_64
+name: manylinux_2_28_ghc965_x86_64
 
 on:
   push:
     branches:
       - main
     paths:
-      - "Dockerfile.manylinux_2_28_ghc964_x86_64"
+      - "Dockerfile.manylinux_2_28_ghc965_x86_64"
   pull_request:
     types:
       - opened
       - synchronize
       - reopened
     paths:
-      - "Dockerfile.manylinux_2_28_ghc964_x86_64"
+      - "Dockerfile.manylinux_2_28_ghc965_x86_64"
   workflow_dispatch:
 
 defaults:
@@ -20,7 +20,7 @@ defaults:
     shell: sh
 
 jobs:
-  manylinux_2_28_ghc964_x86_64:
+  manylinux_2_28_ghc965_x86_64:
     runs-on: ubuntu-latest
     steps:
       - name: Get source
@@ -38,6 +38,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          file: ./Dockerfile.manylinux_2_28_ghc964_x86_64
+          file: ./Dockerfile.manylinux_2_28_ghc965_x86_64
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/manylinux_2_28_ghc964_x86_64:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/manylinux_2_28_ghc965_x86_64:latest
