@@ -1,18 +1,18 @@
-name: manylinux2014_ghc965_x86_64
+name: musllinux_1_2_ghc965_x86_64
 
 on:
   push:
     branches:
       - main
     paths:
-      - "Dockerfile.manylinux2014_ghc965_x86_64"
+      - "Dockerfile.musllinux_1_2_ghc965_x86_64"
   pull_request:
     types:
       - opened
       - synchronize
       - reopened
     paths:
-      - "Dockerfile.manylinux2014_ghc965_x86_64"
+      - "Dockerfile.musllinux_1_2_ghc965_x86_64"
   workflow_dispatch:
 
 defaults:
@@ -20,7 +20,7 @@ defaults:
     shell: sh
 
 jobs:
-  manylinux2014_ghc965_x86_64:
+  musllinux_1_2_ghc965_x86_64:
     runs-on: ubuntu-latest
     steps:
       - name: Get source
@@ -38,6 +38,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          file: ./Dockerfile.manylinux2014_ghc965_x86_64
+          file: ./Dockerfile.musllinux_1_2_ghc965_x86_64
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/manylinux2014_ghc965_x86_64:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/musllinux_1_2_ghc965_x86_64:latest
