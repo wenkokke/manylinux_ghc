@@ -1,6 +1,6 @@
 # Build the container
-# docker build --tag wenkokke/manylinux2014_ghc984_i686 --file ghc984/Dockerfile.manylinux2014_ghc984_i686 .
-FROM quay.io/pypa/manylinux2014_i686
+# docker build --tag wenkokke/manylinux_2_28_ghc984_i686 --file ghc984/Dockerfile.manylinux_2_28_ghc984_i686 .
+FROM quay.io/pypa/manylinux_2_28_i686
 
 # Install prerequisites
 RUN yum install -y gmp-devel ncurses-devel
