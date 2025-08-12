@@ -1,5 +1,5 @@
 # Build the container
-# docker build --tag wenkokke/manylinux2014_ghc965_i686 --file Dockerfile.manylinux2014_ghc965_i686 .
+# docker build --tag wenkokke/manylinux2014_ghc965_i686 --file ghc965/Dockerfile.manylinux2014_ghc965_i686 .
 FROM quay.io/pypa/manylinux2014_i686
 
 # Install prerequisites

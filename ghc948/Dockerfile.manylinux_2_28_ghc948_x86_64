@@ -1,37 +1,44 @@
 # Build the container
-# docker build --tag wenkokke/musllinux_1_1_ghc948_x86_64 --file Dockerfile.musllinux_1_1_ghc948_x86_64 .
-FROM quay.io/pypa/musllinux_1_1_x86_64
+# docker build --tag wenkokke/manylinux_2_28_ghc948_x86_64 --file ghc948/Dockerfile.manylinux_2_28_ghc948_x86_64 .
+FROM quay.io/pypa/manylinux_2_28_x86_64
+
+# Link libgmp.so.10 to libgmp.so
+RUN ln -s "/usr/lib64/libgmp.so.10" "/usr/lib64/libgmp.so"
+
+# Link libtinfo.so.6 to libtinfo.so
+RUN ln -s "/usr/lib64/libtinfo.so.6" "/usr/lib64/libtinfo.so"
 
 # Install prerequisites
-RUN apk add gmp-dev
-RUN apk add ncurses ncurses-dev
+RUN yum install -y gmp-devel ncurses-devel
 
 # Install GHC and Cabal
 RUN <<EOT bash
 set -ex
 
+# Link python3.12 to python3
+ln -s "/usr/local/bin/python3.12" "/usr/local/bin/python3"
+
 # Install wget 3.2
-python3.11 -m pip install wget==3.2
+python3 -m pip install wget==3.2
 
 # Install GHC 9.2.8
-python3.11 -c "import wget; wget.download('https://downloads.haskell.org/~ghc/9.2.8/ghc-9.2.8-x86_64-alpine3.12-linux-gmp.tar.xz', '/tmp/ghc-9.2.8.tar.xz')"
-python3.11 -c "import shutil; shutil.unpack_archive('/tmp/ghc-9.2.8.tar.xz', '/tmp')"
-mv "/tmp/ghc-9.2.8-x86_64-unknown-linux" "/tmp/ghc-9.2.8"
+python3 -c "import wget; wget.download('https://downloads.haskell.org/~ghc/9.2.8/ghc-9.2.8-x86_64-deb10-linux.tar.xz', '/tmp/ghc-9.2.8.tar.xz')"
+python3 -c "import shutil; shutil.unpack_archive('/tmp/ghc-9.2.8.tar.xz', '/tmp')"
 (cd "/tmp/ghc-9.2.8" && ./configure --prefix="/tmp/ghc-toolset-9.2.8/root/usr")
 (cd "/tmp/ghc-9.2.8" && make install)
 rm -rf "/tmp/ghc-9.2.8" "/tmp/ghc-9.2.8.tar.xz"
 
 # Bootstrap Cabal 3.10.2.1
-python3.11 -c "import wget; wget.download('https://github.com/haskell/cabal/archive/refs/tags/cabal-install-v3.10.2.1.zip', '/tmp/cabal.zip')"
-python3.11 -c "import shutil; shutil.unpack_archive('/tmp/cabal.zip', '/tmp')"
+python3 -c "import wget; wget.download('https://github.com/haskell/cabal/archive/refs/tags/cabal-install-v3.10.2.1.zip', '/tmp/cabal.zip')"
+python3 -c "import shutil; shutil.unpack_archive('/tmp/cabal.zip', '/tmp')"
 mv "/tmp/cabal-cabal-install-v3.10.2.1" "/tmp/cabal"
 (cd "/tmp/cabal" && python3 "./bootstrap/bootstrap.py" -d "./bootstrap/linux-9.2.8.json" -w "/tmp/ghc-toolset-9.2.8/root/usr/bin/ghc-9.2.8")
 PATH="/tmp/ghc-toolset-9.2.8/root/usr/bin:${PATH}" "/tmp/cabal/_build/bin/cabal" v2-update
 PATH="/tmp/ghc-toolset-9.2.8/root/usr/bin:${PATH}" "/tmp/cabal/_build/bin/cabal" v2-install cabal-install --overwrite-policy=always --install-method=copy --installdir="/tmp/ghc-toolset-9.2.8/root/usr/bin"
 
 # Bootstrap GHC 9.4.8
-python3.11 -c "import wget; wget.download('https://downloads.haskell.org/~ghc/9.4.8/ghc-9.4.8-src.tar.xz', '/tmp/ghc-9.4.8-src.tar.xz')"
-python3.11 -c "import shutil; shutil.unpack_archive('/tmp/ghc-9.4.8-src.tar.xz', '/tmp')"
+python3 -c "import wget; wget.download('https://downloads.haskell.org/~ghc/9.4.8/ghc-9.4.8-src.tar.xz', '/tmp/ghc-9.4.8-src.tar.xz')"
+python3 -c "import shutil; shutil.unpack_archive('/tmp/ghc-9.4.8-src.tar.xz', '/tmp')"
 
 ## Create and apply the fpic-default patch
 mkdir "/tmp/ghc-9.4.8-patches"
@@ -62,10 +69,12 @@ GhcRtsCcOpts += -fPIC
 BuildFlavour = quick
 EOP
 
-## Install GHC 9.4.8
 (cd "/tmp/ghc-9.4.8" && PATH="/tmp/ghc-toolset-9.2.8/root/usr/bin:${PATH}" ./configure GHC="/tmp/ghc-toolset-9.2.8/root/usr/bin/ghc-9.2.8")
 (cd "/tmp/ghc-9.4.8" && PATH="/tmp/ghc-toolset-9.2.8/root/usr/bin:${PATH}" hadrian/build install --docs=none -j --prefix="/usr/local")
-rm -rf "/tmp/ghc-toolset-9.2.8" "/tmp/ghc-9.4.8" "/tmp/ghc-9.4.8-src.tar.xz"
+rm -rf "/tmp/ghc-toolset-9.2.8" "/tmp/ghc-9.4.8" "/tmp/ghc-9.4.8-src.tar.xz" "/tmp/ghc-9.4.8-patches"
+
+# Unlink python3.12 from python3
+unlink "/usr/local/bin/python3"
 
 # Install Cabal 3.10.2.1
 "/tmp/cabal/_build/bin/cabal" v2-install cabal-install --overwrite-policy=always --install-method=copy --installdir="/usr/local/bin"

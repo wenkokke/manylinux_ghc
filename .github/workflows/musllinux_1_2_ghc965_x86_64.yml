@@ -5,14 +5,14 @@ on:
     branches:
       - main
     paths:
-      - "Dockerfile.musllinux_1_2_ghc965_x86_64"
+      - "ghc965/Dockerfile.musllinux_1_2_ghc965_x86_64"
   pull_request:
     types:
       - opened
       - synchronize
       - reopened
     paths:
-      - "Dockerfile.musllinux_1_2_ghc965_x86_64"
+      - "ghc965/Dockerfile.musllinux_1_2_ghc965_x86_64"
   workflow_dispatch:
 
 defaults:
@@ -38,6 +38,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          file: ./Dockerfile.musllinux_1_2_ghc965_x86_64
+          file: ./ghc965/Dockerfile.musllinux_1_2_ghc965_x86_64
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/musllinux_1_2_ghc965_x86_64:latest

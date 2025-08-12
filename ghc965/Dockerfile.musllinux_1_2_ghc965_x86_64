@@ -1,5 +1,5 @@
 # Build the container
-# docker build --tag wenkokke/musllinux_1_2_ghc965_x86_64 --file Dockerfile.musllinux_1_2_ghc965_x86_64 .
+# docker build --tag wenkokke/musllinux_1_2_ghc965_x86_64 --file ghc965/Dockerfile.musllinux_1_2_ghc965_x86_64 .
 FROM quay.io/pypa/musllinux_1_2_x86_64
 
 # Install prerequisites

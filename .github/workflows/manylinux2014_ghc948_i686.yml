@@ -5,14 +5,14 @@ on:
     branches:
       - main
     paths:
-      - "Dockerfile.manylinux2014_ghc948_i686"
+      - "ghc948/Dockerfile.manylinux2014_ghc948_i686"
   pull_request:
     types:
       - opened
       - synchronize
       - reopened
     paths:
-      - "Dockerfile.manylinux2014_ghc948_i686"
+      - "ghc948/Dockerfile.manylinux2014_ghc948_i686"
   workflow_dispatch:
 
 defaults:
@@ -43,6 +43,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          file: ./Dockerfile.manylinux2014_ghc948_i686
+          file: ./ghc948/Dockerfile.manylinux2014_ghc948_i686
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/manylinux2014_ghc948_i686:latest
